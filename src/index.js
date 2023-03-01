@@ -10,7 +10,7 @@ const markerRoutes = require("./routes/marker");
 const { dbConnections } = require("./database/config");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 const paths = {
   auth: "/auth",
   users: "/user",

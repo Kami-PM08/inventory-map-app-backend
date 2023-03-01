@@ -1,6 +1,4 @@
 const { request, response } = require("express");
-const marker = require("../models/marker");
-
 const Marker = require("../models/marker");
 
 const getMarker = async (req = request, res = response) => {
@@ -36,10 +34,10 @@ const getMarkers = async (req = request, res = response) => {
 };
 
 const getMarkersByUser = async (req = request, res = response) => {
-  const { operator } = req.params;
+  const { user } = req.params;
 
   try {
-    const markers = await Marker.find({ operator: operator });
+    const markers = await Marker.find({ user: user });
     res.json({ markers });
   } catch (error) {
     res.status(500).json({
@@ -56,21 +54,27 @@ const postMarker = async (req = request, res = response) => {
     await marker.save();
 
     res.json({
-      msg: "postMarker",
       marker,
     });
   } catch (error) {
     console.log("Error al crear marcador: ", error);
   }
 };
-const putMarker = (req = request, res = response) => {
+const putMarker = async (req = request, res = response) => {
   const { id } = req.params;
-  const { body } = req;
-  res.json({
-    msg: "putMarker",
-    id,
-    body,
-  });
+  const { name, user, created, ...data } = req.body;
+  try {
+    const marker = await Marker.findByIdAndUpdate(id, data);
+
+    res.json({
+      marker,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      msg: "Error al actualizar marcador",
+    });
+  }
 };
 
 const deleteMarker = async (req = request, res = response) => {
