@@ -7,10 +7,14 @@ const {
   putMarker,
   deleteMarker,
 } = require("../controllers/marker");
+const isAdmin = require("../middleware/isAdmin");
+const jwtValidator = require("../middleware/jwtValidator");
 
 const router = Router();
 
-router.get("/", getMarkers);
+router.use(jwtValidator);
+
+router.get("/", isAdmin, getMarkers);
 router.get("/:user", getMarkersByUser);
 router.post("/", postMarker);
 router.put("/:id", putMarker);

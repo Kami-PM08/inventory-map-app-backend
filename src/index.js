@@ -18,7 +18,7 @@ const paths = {
 };
 
 // Middlewares
-app.use(cors());
+app.use(cors({ exposedHeaders: "jwt" }));
 app.use(express.json());
 // use routes
 app.use(paths.auth, authRoutes);
